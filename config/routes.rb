@@ -10,6 +10,20 @@ Rails.application.routes.draw do
       end
     end
 
-    devise_for :users
+    devise_for :users, :skip => [:registrations, :sessions]
+    as :user do
+      # Sessions
+      post "in"    => "sessions#create", as: :user_session
+      delete "out" => "sessions#destroy", as: :destroy_user_session
+
+      # Registrations
+      post "/register" =>   "registrations#create", as: :user_registration
+      patch "/register" =>  "registrations#update"
+      put "/register" =>    "registrations#update"
+      delete "/register" => "registrations#destroy"
+
+      # Custom
+      get "me", to: "registrations#me"
+    end
   end
 end
