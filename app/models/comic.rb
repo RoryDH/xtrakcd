@@ -1,7 +1,11 @@
 class Comic < ActiveRecord::Base
   include PgSearch
   pg_search_scope :search, :against => [:title, :alt_text, :transcript]
-  default_scope { order(number: :desc) }
+
+  has_many :favourites, as: :favable, dependent: :destroy
+  has_many :favourited_by, through: :favourites, source: :user
+
+  # default_scope { order(number: :desc) }
 
   def to_param
     number.to_i

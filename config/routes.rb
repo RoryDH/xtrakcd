@@ -1,9 +1,7 @@
 Rails.application.routes.draw do
-
-  get 'page/index'
-
   scope :api do
     resources :comics, only: [:show, :index]
+    devise_for :users
   end
 
   # root 'page#index'
