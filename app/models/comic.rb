@@ -1,6 +1,10 @@
 class Comic < ActiveRecord::Base
+  include PgSearch
+  pg_search_scope :search, :against => [:title, :alt_text, :transcript]
+  default_scope { order(number: :desc) }
+
   def to_param
-    number
+    number.to_i
   end
 
   def save_by_number
