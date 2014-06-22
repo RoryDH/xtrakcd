@@ -50,6 +50,9 @@ GEM
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
     json (1.8.1)
+    kaminari (0.15.1)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -125,6 +128,7 @@ DEPENDENCIES
   fastimage
   httparty
   jbuilder (~> 2.0)
+  kaminari
   pg
   pg_search
   pry-rails

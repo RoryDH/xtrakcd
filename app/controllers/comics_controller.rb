@@ -9,7 +9,10 @@ class ComicsController < ApplicationController
     if @q
       db = db.search(@q)
     end
-    @comics = db.limit(20)
+    per = params[:per]
+    per = 20 unless per.present?
+
+    @comics = db.page(params[:page]).per(per)
   end
 
   def show
@@ -21,7 +24,8 @@ private
   end
 
   def format_search_query
-    return if (!params[:q] || params[:q] == "")
-    @q = params[:q].downcase
+    q = params[:q]
+    return unless q.present?
+    @q = q.downcase
   end
 end
