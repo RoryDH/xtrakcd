@@ -5,7 +5,7 @@ class Comic < ActiveRecord::Base
   has_many :favourites, as: :favable, dependent: :destroy
   has_many :favourited_by, through: :favourites, source: :user
 
-  # default_scope { order(number: :desc) }
+  default_scope { order(number: :desc) }
 
   def to_param
     number.to_i
@@ -15,7 +15,6 @@ class Comic < ActiveRecord::Base
     existing = self.class.where(number: number).first
     if existing
       atts = attributes
-      atts.delete("_id")
       existing.update_attributes(atts)
     else
       save

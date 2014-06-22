@@ -5,9 +5,12 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :favourites
-  has_many :favourited, through: :favourites, source: :favable, source_type: "Comic"
+  has_many :favourited, through: :favourites, source: :favable, source_type: 'Comic'
 
   def favourite_comic(comic)
-    favourites.create(comic: comic)
+    unless comic.is_a?(Comic)
+      comic = Comic.find_by_number!(comic.to_i)
+    end
+    favourites.new(favable: comic)
   end
 end
