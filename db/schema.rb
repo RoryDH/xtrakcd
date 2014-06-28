@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140622161445) do
+ActiveRecord::Schema.define(version: 20140623215842) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "comics", force: true do |t|
     t.integer  "number"
@@ -33,6 +34,19 @@ ActiveRecord::Schema.define(version: 20140622161445) do
     t.datetime "updated_at"
   end
 
+  add_index "comics", ["number"], name: "index_comics_on_number", using: :btree
+
+  create_table "destinations", force: true do |t|
+    t.integer  "user_id"
+    t.text     "name"
+    t.string   "klass"
+    t.hstore   "options"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "destinations", ["user_id"], name: "index_destinations_on_user_id", using: :btree
+
   create_table "favourites", force: true do |t|
     t.integer  "user_id"
     t.integer  "favable_id"
@@ -40,6 +54,34 @@ ActiveRecord::Schema.define(version: 20140622161445) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "favourites", ["favable_type", "favable_id"], name: "index_favourites_on_favable_type_and_favable_id", using: :btree
+  add_index "favourites", ["user_id"], name: "index_favourites_on_user_id", using: :btree
+
+  create_table "outbound_comics", force: true do |t|
+    t.integer  "schedule_id"
+    t.integer  "comic_number"
+    t.datetime "sent_at"
+    t.integer  "destination_ids", default: [], array: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "outbound_comics", ["schedule_id"], name: "index_outbound_comics_on_schedule_id", using: :btree
+
+  create_table "schedules", force: true do |t|
+    t.integer  "user_id"
+    t.text     "name"
+    t.datetime "active"
+    t.integer  "send_count"
+    t.string   "klass"
+    t.hstore   "settings"
+    t.integer  "destination_ids", default: [], array: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "schedules", ["user_id"], name: "index_schedules_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
