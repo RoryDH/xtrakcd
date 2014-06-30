@@ -6,6 +6,11 @@ class ApplicationController < ActionController::Base
 
   before_action :authenticate_user!
 
+  def latest_comic
+    @n ||= Comic.order(number: :desc).first
+  end
+
+protected
   def rec_errs(rec)
     return render json: { errors: rec.errors.messages }
   end

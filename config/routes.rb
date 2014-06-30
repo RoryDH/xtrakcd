@@ -7,6 +7,8 @@ Rails.application.routes.draw do
       end
       collection do
         get 'favourites' => 'favourites#index'
+        get 'random'
+        get 'latest'
       end
     end
 
