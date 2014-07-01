@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
 
   has_many :favourites
   has_many :favourited, through: :favourites, source: :favable, source_type: 'Comic'
+  has_many :schedules
 
   def favourite_comic(comic)
     unless comic.is_a?(Comic)

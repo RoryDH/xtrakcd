@@ -1,6 +1,6 @@
 class FavouritesController < ApplicationController
   def index
-    @comics = current_user.favourited
+    @comics = current_user.favourited.page(params[:page]).per(20)
     render 'comics/index'
   end
 

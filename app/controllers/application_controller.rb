@@ -12,7 +12,11 @@ class ApplicationController < ActionController::Base
 
 protected
   def rec_errs(rec)
-    return render json: { errors: rec.errors.messages }
+    render json: { fielderrors: rec.errors.messages }, status: :unprocessable_entity
+  end
+
+  def json_not_found
+    render json: { errors: ["Not found"] }, status: :not_found
   end
 
 end

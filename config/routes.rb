@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   scope :api do
-    resources :comics, only: [:show, :index] do
+    resources :comics, path: 'c', only: [:show, :index] do
       member do
         post 'favourite' => 'favourites#create'
         delete 'favourite' => 'favourites#destroy'

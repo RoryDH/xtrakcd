@@ -1,7 +1,7 @@
 class ComicsController < ApplicationController
   before_action :get_comic, only: [:show]
-
   respond_to :json
+  rescue_from ActiveRecord::RecordNotFound, with: :json_not_found
 
   def index
     format_search_query
