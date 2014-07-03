@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 20140623215842) do
     t.integer  "user_id"
     t.text     "name"
     t.string   "klass"
-    t.hstore   "options"
+    t.hstore   "settings",   default: {}, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -73,15 +73,15 @@ ActiveRecord::Schema.define(version: 20140623215842) do
     t.integer  "user_id"
     t.text     "name"
     t.datetime "active"
-    t.integer  "send_count"
+    t.integer  "send_count",      default: 0
     t.string   "klass"
-    t.hstore   "settings"
-    t.integer  "destination_ids", default: [], array: true
+    t.hstore   "settings",        default: {}, null: false
+    t.integer  "destination_ids", default: [],              array: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "schedules", ["user_id"], name: "index_schedules_on_user_id", using: :btree
+  add_index "schedules", ["user_id", "active"], name: "index_schedules_on_user_id_and_active", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false

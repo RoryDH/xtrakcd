@@ -12,6 +12,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :schedules, path: 's', only: [:index, :show, :create, :update, :destroy]
+
     devise_for :users, :skip => [:registrations, :sessions]
     as :user do
       # Sessions

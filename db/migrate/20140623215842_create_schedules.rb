@@ -4,23 +4,23 @@ class CreateSchedules < ActiveRecord::Migration
       t.integer :user_id
       t.text :name
       t.datetime :active
-      t.integer :send_count
+      t.integer :send_count, default: 0
 
       t.string :klass # RandomSchedule/LatestSchedule/StartFromSchedule
-      t.hstore :settings
+      t.hstore :settings, default: '', null: false
 
       t.integer :destination_ids, array: true, default: []
 
       t.timestamps
     end
-    add_index :schedules, :user_id
+    add_index :schedules, [:user_id, :active]
 
     create_table :destinations do |t|
       t.integer :user_id
       t.text :name
 
       t.string :klass # Email/IRC/HipChat/Slack
-      t.hstore :options
+      t.hstore :settings, default: '', null: false
 
       t.timestamps
     end
