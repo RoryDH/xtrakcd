@@ -51,7 +51,7 @@ private
   def set_schedule
     @schedule.name = params[:name] if params[:name]
 
-    if params[:active] == true && !@schedule.active?
+    if params[:active] == true
       @schedule.activate!
     elsif params[:active] == false # not null/undefined
       @schedule.deactivate!
