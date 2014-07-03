@@ -11,12 +11,17 @@ class ApplicationController < ActionController::Base
   end
 
 protected
+  def errs(a, status = :unprocessable_entity)
+    a = [a] if a.is_a?(String)
+    render json: { (a.is_a?(Hash) ? :fielderrors : :errors) => a }, status: status
+  end
+
   def rec_errs(rec)
-    render json: { fielderrors: rec.errors.messages }, status: :unprocessable_entity
+    errs(rec.errors.messages)
   end
 
   def json_not_found
-    render json: { errors: ["Not found"] }, status: :not_found
+    errs(["Not found"], :not_found)
   end
 
 end

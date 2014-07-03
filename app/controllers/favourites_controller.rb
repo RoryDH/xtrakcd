@@ -17,10 +17,10 @@ class FavouritesController < ApplicationController
   def destroy
     comic = Comic.find_by_number!(params[:id])
     fav = current_user.favourites.find_by_favable_id!(comic.id)
-    if fav.destroy!
+    if fav.destroy
       head :ok
     else
-      head :not_found
+      head :internal_server_error
     end
   end
 end
