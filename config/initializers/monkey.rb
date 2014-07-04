@@ -20,9 +20,9 @@ module ActiveRecord
     def read_store_attribute(store_attribute, key)
       accessor = store_accessor_for(store_attribute)
       val = accessor.read(self, store_attribute, key)
-      convert = self.class.typed_stores[store_attribute][key]
-
       return if val.nil?
+      
+      convert = self.class.typed_stores[store_attribute][key]
       if convert.is_a?(Proc)
         convert.call(val)
       elsif convert.is_a?(Symbol)
