@@ -1,5 +1,6 @@
 json.me do
-  json.(@me, :email, :created_at)
+  json.(@me, :id, :email, :created_at)
+  json.confirmed(@user.confirmed_at?)
   json.favourited do
     json.array!(@favourited_numbers)
   end

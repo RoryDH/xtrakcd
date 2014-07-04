@@ -32,7 +32,7 @@ group :development do
 end
 
 gem 'httparty'
-gem 'devise'
+gem 'devise', '3.2.4'
 gem 'fastimage'
 gem 'pg_search'
 gem 'kaminari'

@@ -35,4 +35,21 @@ protected
     errs(['Not found'], :not_found)
   end
 
+  def already_authenticated # Custom version of devise :require_no_authentication
+    assert_is_devise_resource!
+    return unless is_navigational_format?
+    no_input = devise_mapping.no_input_strategies
+
+    authenticated = if no_input.present?
+      args = no_input.dup.push scope: resource_name
+      warden.authenticate?(*args)
+    else
+      warden.authenticated?(resource_name)
+    end
+
+    if authenticated && resource = warden.user(resource_name)
+      errs('already_authenticated', :method_not_allowed)
+    end
+  end
+
 end
