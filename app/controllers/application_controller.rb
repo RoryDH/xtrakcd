@@ -3,6 +3,10 @@ class ApplicationController < ActionController::Base
 
   before_action :authenticate_user!
 
+  rescue_from ActiveRecord::RecordNotFound do |exception|
+    errs('record_not_found')
+  end
+
 protected
   def latest_comic
     @n ||= Comic.order(number: :desc).first
@@ -23,7 +27,6 @@ protected
 
   def already_authenticated # Custom version of devise :require_no_authentication
     assert_is_devise_resource!
-    return unless is_navigational_format?
     no_input = devise_mapping.no_input_strategies
 
     authenticated = if no_input.present?

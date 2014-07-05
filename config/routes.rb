@@ -21,15 +21,15 @@ Rails.application.routes.draw do
   devise_for :users, :skip => [:registrations, :sessions]
   as :user do
     # Sessions
-    get "me"     => "sessions#me"
-    post "in"    => "sessions#create"
-    delete "out" => "sessions#destroy"
+    get 'me'     => 'sessions#me'
+    post 'in'    => 'sessions#create'
+    delete 'out' => 'sessions#destroy'
 
     # Registrations
-    post "/register" => "registrations#create"
-    patch "/me"      => "registrations#update"
-    put "/me"        => "registrations#update"
-    delete "/me"     => "registrations#destroy"
+    post '/register' => 'registrations#create'
+    patch '/me'      => 'registrations#update'
+    put '/me'        => 'registrations#update'
+    delete '/me'     => 'registrations#destroy'
   end
   root to: 'misc#index'
 end
