@@ -1,18 +1,22 @@
 Rails.application.routes.draw do
-  resources :comics, path: 'c', only: [:show, :index] do
-    member do
-      post 'favourite' => 'favourites#create'
-      delete 'favourite' => 'favourites#destroy'
-    end
-    collection do
-      get 'favourites' => 'favourites#index'
-      get 'random'
-      get 'latest'
+  scope :api do
+    scope :v1 do
+      resources :comics, path: 'c', only: [:show, :index] do
+        member do
+          post 'favourite' => 'favourites#create'
+          delete 'favourite' => 'favourites#destroy'
+        end
+        collection do
+          get 'favourites' => 'favourites#index'
+          get 'random'
+          get 'latest'
+        end
+      end
+
+      resources :schedules, path: 's', only: [:index, :show, :create, :update, :destroy]
+      resources :destinations, path: 'd', only: [:index, :show, :create, :update, :destroy]
     end
   end
-
-  resources :schedules, path: 's', only: [:index, :show, :create, :update, :destroy]
-  resources :destinations, path: 'd', only: [:index, :show, :create, :update, :destroy]
 
   devise_for :users, :skip => [:registrations, :sessions]
   as :user do
@@ -22,11 +26,10 @@ Rails.application.routes.draw do
     delete "out" => "sessions#destroy"
 
     # Registrations
-    post "/register"   => "registrations#create"
-    patch "/register"  => "registrations#update"
-    put "/register"    => "registrations#update"
-    delete "/register" => "registrations#destroy"
+    post "/register" => "registrations#create"
+    patch "/me"      => "registrations#update"
+    put "/me"        => "registrations#update"
+    delete "/me"     => "registrations#destroy"
   end
-
-  root to: 'application#index'
+  root to: 'misc#index'
 end
