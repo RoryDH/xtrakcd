@@ -3,8 +3,9 @@ class CreateSchedules < ActiveRecord::Migration
     create_table :schedules do |t|
       t.integer :user_id
       t.text :name
-      t.datetime :active
+      t.datetime :activated_at
       t.integer :send_count, default: 0
+      t.datetime :next_send_at
 
       t.string :klass # RandomSchedule/LatestSchedule/StartFromSchedule
       t.hstore :settings, default: '', null: false
@@ -13,7 +14,8 @@ class CreateSchedules < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :schedules, [:user_id, :active]
+    add_index :schedules, :user_id
+    add_index :schedules, [:activated_at, :next_send_at]
 
     create_table :destinations do |t|
       t.integer :user_id

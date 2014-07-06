@@ -73,8 +73,9 @@ ActiveRecord::Schema.define(version: 20140623215842) do
   create_table "schedules", force: true do |t|
     t.integer  "user_id"
     t.text     "name"
-    t.datetime "active"
+    t.datetime "activated_at"
     t.integer  "send_count",      default: 0
+    t.datetime "next_send_at"
     t.string   "klass"
     t.hstore   "settings",        default: {}, null: false
     t.integer  "destination_ids", default: [],              array: true
@@ -82,7 +83,8 @@ ActiveRecord::Schema.define(version: 20140623215842) do
     t.datetime "updated_at"
   end
 
-  add_index "schedules", ["user_id", "active"], name: "index_schedules_on_user_id_and_active", using: :btree
+  add_index "schedules", ["activated_at", "next_send_at"], name: "index_schedules_on_activated_at_and_next_send_at", using: :btree
+  add_index "schedules", ["user_id"], name: "index_schedules_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false

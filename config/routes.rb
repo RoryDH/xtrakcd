@@ -18,20 +18,23 @@ Rails.application.routes.draw do
         post :test, on: :member
       end
     end
-  end
 
-  devise_for :users, :skip => [:registrations, :sessions]
-  as :user do
-    # Sessions
-    get 'me'     => 'sessions#me'
-    post 'in'    => 'sessions#create'
-    delete 'out' => 'sessions#destroy'
+    devise_for :users, :skip => [:registrations, :sessions]
+    as :user do
+      # Sessions
+      post 'in'    => 'sessions#create'
+      delete 'out' => 'sessions#destroy'
+      get 'me'     => 'sessions#me'
 
-    # Registrations
-    post '/register' => 'registrations#create'
-    patch '/me'      => 'registrations#update'
-    put '/me'        => 'registrations#update'
-    delete '/me'     => 'registrations#destroy'
+      # Registrations
+      post '/me' => 'registrations#create'
+      patch '/me'      => 'registrations#update'
+      put '/me'        => 'registrations#update'
+      delete '/me'     => 'registrations#destroy'
+    end
+
+    root to: 'misc#index', as: :api_root
   end
   root to: 'misc#index'
+
 end

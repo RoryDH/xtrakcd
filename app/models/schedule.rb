@@ -22,11 +22,11 @@ class Schedule < ActiveRecord::Base
   end
 
   def activate!
-    self.active = Time.now unless active
+    self.activated_at = Time.now unless activated_at
   end
 
   def deactivate!
-    self.active = nil
+    self.activated_at = nil
   end
 
   def destinations
