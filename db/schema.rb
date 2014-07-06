@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20140623215842) do
   create_table "destinations", force: true do |t|
     t.integer  "user_id"
     t.text     "name"
+    t.datetime "tested_at"
     t.string   "klass"
     t.hstore   "settings",   default: {}, null: false
     t.datetime "created_at"

@@ -14,7 +14,9 @@ Rails.application.routes.draw do
       end
 
       resources :schedules, path: 's', only: [:index, :show, :create, :update, :destroy]
-      resources :destinations, path: 'd', only: [:index, :show, :create, :update, :destroy]
+      resources :destinations, path: 'd', only: [:index, :show, :create, :update, :destroy] do
+        post :test, on: :member
+      end
     end
   end
 

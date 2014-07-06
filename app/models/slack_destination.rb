@@ -1,0 +1,3 @@
+class SlackDestination < Destination
+  
+end

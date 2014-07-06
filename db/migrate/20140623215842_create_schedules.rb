@@ -18,6 +18,7 @@ class CreateSchedules < ActiveRecord::Migration
     create_table :destinations do |t|
       t.integer :user_id
       t.text :name
+      t.datetime :tested_at
 
       t.string :klass # Email/IRC/HipChat/Slack
       t.hstore :settings, default: '', null: false

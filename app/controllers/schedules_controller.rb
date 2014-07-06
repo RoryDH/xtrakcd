@@ -49,7 +49,7 @@ private
   end
 
   def set_schedule
-    @schedule.name = params[:name] if params[:name]
+    @schedule.name = params[:name] if params[:name].present?
 
     if params[:active] == true
       @schedule.activate!
@@ -57,13 +57,14 @@ private
       @schedule.deactivate!
     end
 
-    @schedule.class.stored_attributes[:settings].each do |s|
-      value = params[s]
-      next if !params.has_key?(s) || @schedule.settings[s] == value.to_s
+    s = @schedule.settings
+    @schedule.class.stored_attributes[:settings].each do |key|
+      value = params[key]
+      next if !params.has_key?(key) || s[key] == value.to_s
       if value
-        @schedule.settings[s] = value
+        s[key] = value
       else 
-        @schedule.settings[s] = nil
+        s[key] = nil
       end
       @schedule.settings_will_change!
     end

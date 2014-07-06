@@ -6,19 +6,19 @@ class Schedule < ActiveRecord::Base
     'start_from' => StartFromSchedule 
   }
   KLASS_KIND = KIND_KLASS.invert
+  attr_readonly :klass
 
   belongs_to :user
 
-  validates :user_id, :klass, presence: true
+  validates :user_id, :klass, :name, presence: true
+  validates :name, length: { in: 1..100 }
   validate :destination_ids_must_be_valid
-
-  attr_readonly :klass
 
   default_scope { where.not(klass: nil) }
   scope :active, -> { where.not(active: nil) }
 
   def kind
-    KIND_KLASS[klass]
+    KLASS_KIND[self.class]
   end
 
   def activate!
@@ -27,6 +27,10 @@ class Schedule < ActiveRecord::Base
 
   def deactivate!
     self.active = nil
+  end
+
+  def destinations
+    Destination.where(id: destination_ids)
   end
 
 private

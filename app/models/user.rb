@@ -20,4 +20,8 @@ class User < ActiveRecord::Base
   def has_max_schedules?
     schedules.count >= MAX_SCHEDULES
   end
+
+  def has_max_destinations?
+    destinations.count >= MAX_DESTINATIONS
+  end
 end

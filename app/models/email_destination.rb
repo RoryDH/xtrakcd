@@ -1,0 +1,3 @@
+class EmailDestination < Destination
+  
+end
