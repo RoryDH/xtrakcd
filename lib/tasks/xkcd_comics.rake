@@ -1,6 +1,6 @@
 require 'thread'
 require 'xkcd_api'
-MAX_THREADS = 12
+MAX_THREADS = 3
 QUEUE = Queue.new
 
 namespace :comics do
@@ -39,14 +39,15 @@ namespace :comics do
   desc "Get's latest comic"
   task :record_latest => :environment do
     c = Comic.new(XkcdApi.latest)
-    c.set_dimensions
+    # c.set_dimensions
     puts c.save_by_number
   end
 
   desc "Records all comics"
   task :record_all => :environment do
-    range_to_get = (1..XkcdApi.latest[:number])
-    comics = get_range(range_to_get)
+    latest = XkcdApi.latest
+    range_to_get = (1..(latest[:number] - 1))
+    comics = get_range(range_to_get).push(latest)
 
     comics.each { |c| c.save_by_number }
     puts "\ntotal:#{comics.length}"
