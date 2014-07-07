@@ -40,3 +40,18 @@ end
 #     self == i.to_s ? i : self
 #   end
 # end
+
+class Time
+  NEXT_OPTS = [:year, :month, :day, :hour, :min, :sec] # and :wday
+  AS_NEXT_OPTS = [:years, :months, :days, :hours, :minutes, :seconds]
+  def next_where(opts)
+    opts[:day] ||= 1 if opts[:month]
+    opts[:hour] ||= 0 if opts[:day] || opts[:month]
+    changed = self.change(opts)
+    return changed if changed > self
+
+    highest_attr_index = NEXT_OPTS.index((NEXT_OPTS & opts.keys).first) - 1
+    overflow_attr = AS_NEXT_OPTS[highest_attr_index]
+    changed.advance(overflow_attr => 1)
+  end
+end
