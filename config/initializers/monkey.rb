@@ -45,8 +45,10 @@ class Time
   NEXT_OPTS = [:year, :month, :day, :hour, :min, :sec] # and :wday
   AS_NEXT_OPTS = [:years, :months, :days, :hours, :minutes, :seconds]
   def next_where(opts)
-    opts[:day] ||= 1 if opts[:month]
-    opts[:hour] ||= 0 if opts[:day] || opts[:month]
+    if opts[:day] || opts[:month]
+      opts[:hour] ||= 0
+      opts[:day] ||= 1 if opts[:month]
+    end
     changed = self.change(opts)
     return changed if changed > self
 
