@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
 
 protected
   def latest_comic
-    @n ||= Comic.order(number: :desc).first
+    @n ||= Comic.latest
   end
 
   def errs(a, status = :unprocessable_entity)

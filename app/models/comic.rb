@@ -9,21 +9,27 @@ class Comic < ActiveRecord::Base
     number.to_i
   end
 
-  def save_by_number
-    existing = self.class.where(number: number).first
-    if existing
-      atts = attributes
-      existing.update_attributes(atts)
-    else
-      save
-    end
-  end
-
   def set_dimensions
     self.width, self.height = FastImage.size(img_uri)
   end
 
-  def self.random(upper, lower)
-    find_by_number!(rand(upper..lower))
+  def self.random(lower, upper)
+    lower ||= 1
+    upper ||= latest.number
+    n = rand(lower..upper)
+    find_by_number!(n)
+  end
+
+  def self.latest
+    order(number: :desc).first
+  end
+
+  def self.save_by_number(comic_hash)
+    existing = find_by_number(comic_hash[:number])
+    if existing
+      existing.update_attributes(comic_hash)
+    else
+      create(comic_hash)
+    end
   end
 end

@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(version: 20140623215842) do
 
   create_table "outbound_comics", force: true do |t|
     t.integer  "schedule_id"
-    t.integer  "comic_number"
+    t.integer  "comic_id"
     t.datetime "sent_at"
     t.integer  "destination_ids", default: [], array: true
     t.datetime "created_at"

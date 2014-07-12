@@ -31,7 +31,7 @@ class CreateSchedules < ActiveRecord::Migration
 
     create_table :outbound_comics do |t|
       t.integer :schedule_id
-      t.integer :comic_number
+      t.integer :comic_id
       t.datetime :sent_at
 
       t.integer :destination_ids, array: true, default: []

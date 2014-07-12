@@ -27,10 +27,10 @@ Rails.application.routes.draw do
       get 'me'     => 'sessions#me'
 
       # Registrations
-      post '/me' => 'registrations#create'
-      patch '/me'      => 'registrations#update'
-      put '/me'        => 'registrations#update'
-      delete '/me'     => 'registrations#destroy'
+      post '/me'   => 'registrations#create'
+      patch '/me'  => 'registrations#update'
+      put '/me'    => 'registrations#update'
+      delete '/me' => 'registrations#destroy'
     end
 
     root to: 'misc#index', as: :api_root
