@@ -5,7 +5,9 @@ module XkcdApi
   module_function
 
   def get_number(number)
-    comic_params(get_with_errors("/#{number}/info.0.json"))
+    hsh = comic_params(get_with_errors("/#{number}/info.0.json"))
+    hsh[:number] ||= number
+    hsh
   end
 
   def latest
@@ -13,23 +15,21 @@ module XkcdApi
   end
 
   def get_with_errors(urn)
-    data = nil
     begin
       response = get(urn, { timeout: 22 })
       case response.code
         when 200
-          data = JSON.parse(response.body)
+          JSON.parse(response.body)
         when 404
-          data = { error: "404: Not found" }
+          { error: "404: Not found" }
         when 500...600
-          data = { error: "Server error: #{response.code}" }
+          { error: "Server error: #{response.code}" }
       end
     rescue Net::ReadTimeout
-      data = { error: "timeout" }
+      { error: "timeout" }
     rescue SocketError
-      data = { error: "No connection available" }
+      { error: "No connection available" }
     end
-    data
   end
 
   def comic_params(i)
@@ -38,12 +38,14 @@ module XkcdApi
       safe_title:     i["safe_title"],
       number:         i["num"],
       img_url:        i["img"],
-      date_published: Time.new(i["year"] || 0, i["month"], i["day"]),
       alt_text:       i["alt"],
       transcript:     i["transcript"],
       special_link:   i["link"],
       news:           i["news"]
     }
+    if i['year'] 
+      hsh[:date_published] = Time.new(i["year"], i["month"], i["day"])
+    end
     hsh.each { |k, v| hsh[k] = nil if v == "" }
   end
 end
