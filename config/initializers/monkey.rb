@@ -45,15 +45,38 @@ class Time
   NEXT_OPTS = [:year, :month, :day, :hour, :min, :sec] # and :wday
   AS_NEXT_OPTS = [:years, :months, :days, :hours, :minutes, :seconds]
   def next_where(opts)
-    if opts[:day] || opts[:month]
+    raise ArgumentError if (opts[:wday] && opts[:day])
+
+    if opts[:wday] || opts[:day] || opts[:month]
       opts[:hour] ||= 0
       opts[:day] ||= 1 if opts[:month]
     end
-    changed = self.change(opts)
-    return changed if changed > self
 
-    highest_attr_index = NEXT_OPTS.index((NEXT_OPTS & opts.keys).first) - 1
+    time = self.change(opts)
+
+    if opts[:wday]
+      w = opts[:wday]
+      opts.delete(:wday)
+
+      wday_advance = if w > time.wday
+        w - time.wday
+      elsif w < time.wday
+        (7 - time.wday) + w
+      else
+        0
+      end
+      time = time.advance(days: wday_advance)
+
+      if time < self
+        time = time.advance(weeks: 1)
+      end
+    end
+
+    return time if time > self
+
+    keys_in_order = (NEXT_OPTS & opts.keys)
+    highest_attr_index = NEXT_OPTS.index(keys_in_order.first) - 1
     overflow_attr = AS_NEXT_OPTS[highest_attr_index]
-    changed.advance(overflow_attr => 1)
+    time.advance({overflow_attr => 1})
   end
 end
