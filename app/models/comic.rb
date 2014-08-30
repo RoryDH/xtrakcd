@@ -13,10 +13,8 @@ class Comic < ActiveRecord::Base
     self.width, self.height = FastImage.size(img_uri)
   end
 
-  def self.random(lower, upper)
-    lower ||= 1
-    upper ||= latest.number
-    n = rand(lower..upper)
+  def self.random(lower = 1, upper = latest.number)
+    n = rand(upper)
     find_by_number!(n)
   end
 

@@ -3,7 +3,7 @@ class Schedule < ActiveRecord::Base
   KIND_KLASS = {
     'random'     => RandomSchedule,
     'latest'     => LatestSchedule,
-    'start_from' => StartFromSchedule 
+    'start_from' => StartFromSchedule
   }
   KLASS_KIND = KIND_KLASS.invert
   attr_readonly :klass
@@ -34,13 +34,14 @@ class Schedule < ActiveRecord::Base
   end
 
   def destinations
-    Destination.where(id: destination_ids)
+    @destinations ||= Destination.where(id: destination_ids)
   end
 
-  def run_schedule
+  def create_outbound
     comic = get_next_comic # must be defined on subclass
     outbound_comics.create(comic_id: comic.id)
-    save if set_next_send
+    set_next_send
+    save
   end
 
   def calc_next_send # subclasses should override when necessary
@@ -55,9 +56,8 @@ class Schedule < ActiveRecord::Base
     self.next_send_at = calc_next_send
   end
 
-  def self.send_all_due
-    due = active.due
-    due.each { |s| s.run_schedule }
+  def self.outbound_all_due
+    due = active.due.each(&:create_outbound)
   end
 
 private

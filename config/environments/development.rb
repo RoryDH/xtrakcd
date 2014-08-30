@@ -27,4 +27,7 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.action_mailer.default_url_options = { host: 'xtrakcd.dev' }
+
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = Rails.application.secrets.mailgun.symbolize_keys
 end

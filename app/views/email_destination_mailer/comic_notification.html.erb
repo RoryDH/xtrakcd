@@ -1,0 +1,11 @@
+<div style="font-family:Arial;">
+  You are being notified about xkcd #<%= @comic.number %> (<%= @comic.title %>)
+  <br>
+  <div style="
+    overflow:hidden;
+    height:200px;
+    width:400px;
+    background-image: url(<%= @comic.img_url %>);
+    background-repeat: no-repeat; ">
+  </div>
+</div>

@@ -11,7 +11,7 @@ class Destination < ActiveRecord::Base
   RE_TEST_ATTRS = ['settings']
   before_save :invalidate_tested_if_changed
 
-  belongs_to :user
+  belongs_to :user, class: User
 
   validates :user_id, :klass, presence: true
   validates :name, length: { in: 1..100 }

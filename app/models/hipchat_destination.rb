@@ -6,7 +6,7 @@ class HipchatDestination < Destination
   validates :api_key, length: { is: 40 }
   validates :room, length: { in: 1..100 }
 
-  # def send(message)
+  def deliver(message)
     
-  # end
+  end
 end

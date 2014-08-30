@@ -19,7 +19,7 @@ class SchedulesController < ApplicationController
     set_schedule
 
     if @schedule.save
-      render 'show'
+      render('show')
     else
       rec_errs(@schedule)
     end
@@ -29,7 +29,7 @@ class SchedulesController < ApplicationController
     set_schedule
 
     if @schedule.save
-      render 'show'
+      render('show')
     else
       rec_errs(@schedule)
     end
@@ -37,9 +37,9 @@ class SchedulesController < ApplicationController
 
   def destroy
     if @schedule.destroy
-      head :ok
+      head(:ok)
     else
-      head :internal_server_error
+      head(:internal_server_error)
     end
   end
 
@@ -61,11 +61,7 @@ private
     @schedule.class.stored_attributes[:settings].each do |key|
       value = params[key]
       next if !params.has_key?(key) || s[key] == value.to_s
-      if value
-        s[key] = value
-      else 
-        s[key] = nil
-      end
+      s[key] = value || nil
       @schedule.settings_will_change!
     end
 

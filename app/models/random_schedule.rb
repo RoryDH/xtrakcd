@@ -7,7 +7,7 @@ class RandomSchedule < Schedule
     'min'         => :to_i
 
   def get_next_comic
-    Comic.random(lower_bound, upper_bound)
+    Comic.random
   end
 
 end

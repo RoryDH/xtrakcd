@@ -7,14 +7,18 @@ class ApplicationController < ActionController::Base
     errs('record_not_found')
   end
 
+  rescue_from JSON::ParserError do |exception|
+    errs('invalid_json')
+  end
+
 protected
   def latest_comic
     @n ||= Comic.latest
   end
 
-  def errs(a, status = :unprocessable_entity)
-    a = [a] if a.is_a?(String)
-    render json: { (a.is_a?(Hash) ? :fielderrors : :errors) => a }, status: status
+  def errs(message, status = :unprocessable_entity)
+    message = [message] if message.is_a?(String)
+    render json: { (message.is_a?(Hash) ? :fielderrors : :errors) => message }, status: status
   end
 
   def rec_errs(rec)

@@ -15,7 +15,7 @@ class DestinationsController < ApplicationController
     end
     klass = Destination::KIND_KLASS[params[:kind]]
     return errs('Must give valid destination kind.') unless klass
-    @dest = klass.new(user: current_user)
+    @dest = klass.new(user_id: current_user.id)
     set_destination
 
     if @dest.save
