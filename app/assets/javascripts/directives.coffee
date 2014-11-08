@@ -3,7 +3,7 @@ xtrakcd = angular.module('xtrakcd')
 xtrakcd.directive("comicImage", [->
   restrict: "E"
   scope:
-    imgUrl: "="
+    comic: "="
 
   replace: true
   template: """
@@ -14,7 +14,7 @@ xtrakcd.directive("comicImage", [->
       <div class=\"text-danger image-message\" ng-show=\"imageStatus === 2\">
         <i class=\"fa fa-times\"></i> Error getting comic image...
       </div>
-      <img ng-src="{{imgUrl}}" ng-show="imageStatus"/>
+      <img ng-src="{{comic.img_url}}" title="{{comic.alt_text}}" ng-show="imageStatus"/>
     </div>
   """
 

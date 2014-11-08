@@ -8,7 +8,7 @@ xtrakcd.config([
   '$dropdownProvider'
   ($routeProvider, $tooltipProvider, $modalProvider, $popoverProvider, $dropdownProvider) ->
     $routeProvider.when('/',
-      templateUrl: 'views/list.html'
+      templateUrl: 'list.html'
       controller: 'ListCtrl'
     ).when '/c/:number',
       templateUrl: 'views/comic.html'
@@ -40,3 +40,7 @@ xtrakcd.filter('cap', ->
       input = input.toLowerCase()
       input.substring(0,1).toUpperCase() + input.substring(1)
 )
+
+xtrakcd.filter('unsafe', ['$sce', ($sce) ->
+  (val) -> $sce.trustAsHtml(val)
+])

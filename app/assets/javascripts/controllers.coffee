@@ -3,9 +3,10 @@ xtrakcd = angular.module('xtrakcd')
 xtrakcd.controller("MainCtrl", [
   '$scope'
   '$http'
+  '$location'
   '$modal'
   'Resp'
-  ($scope, $http, $modal, Resp) ->
+  ($scope, $http, $location, $modal, Resp) ->
     $scope.u = null
     $scope.setUser = (u) ->
       $scope.u = u
@@ -42,13 +43,19 @@ xtrakcd.controller("MainCtrl", [
         template: "/views/register.html"
         scope: $scope
       )
+
+    $scope.gotoSearch = (query) ->
+      $scope.currentC = null
+      $location.path('/').search('q', query)
+
 ])
 
 xtrakcd.controller("ListCtrl", [
   '$scope'
+  '$routeParams'
   'Comic'
-  ($scope, Comic) ->
-    $scope.comics = Comic.list()
+  ($scope, $routeParams, Comic) ->
+    $scope.comics = Comic.list({q: $routeParams.q})
     $scope.comicModalByIndex = (i) ->
       $scope.openComicModal $scope.comics[i]
 ])

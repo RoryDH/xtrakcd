@@ -6,9 +6,10 @@ class ComicsController < ApplicationController
 
   def index
     format_search_query
-    db = Comic.order(number: :desc)
-    if @q
-      db = db.search(@q)
+    db = if @q
+      Comic.search(@q)
+    else
+      Comic.order(number: :desc)
     end
     per = params[:per]
     per = 20 unless per.present?
