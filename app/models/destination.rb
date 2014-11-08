@@ -39,4 +39,8 @@ class Destination < ActiveRecord::Base
   def invalidate_tested_if_changed
     invalidate_test! if needs_retesting?
   end
+
+  def deliver
+    raise NoMethodError, 'deliver method must be defined on destination subclass'
+  end
 end

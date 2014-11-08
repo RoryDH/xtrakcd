@@ -11,7 +11,7 @@ class OutboundComic < ActiveRecord::Base
       dest.deliver(comic)
       successful_destinations << dest
     end
-    self.destination_ids = successful_destinations
+    self.destination_ids = successful_destinations.map(&:id)
     self.sent_at = Time.now
     save
   end
