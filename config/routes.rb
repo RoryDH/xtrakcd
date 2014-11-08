@@ -35,6 +35,5 @@ Rails.application.routes.draw do
 
     root to: 'misc#index', as: :api_root
   end
-  root to: 'misc#index'
 
 end

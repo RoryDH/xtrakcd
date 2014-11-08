@@ -17,3 +17,7 @@
 
 
 /config/secrets.yml
+
+node_modules
+public/css
+public/js

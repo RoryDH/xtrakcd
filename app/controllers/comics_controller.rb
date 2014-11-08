@@ -1,4 +1,5 @@
 class ComicsController < ApplicationController
+  skip_before_action :authenticate_user!, only: [:index, :show, :latest, :random]
   before_action :get_comic, only: [:show]
   respond_to :json
   rescue_from ActiveRecord::RecordNotFound, with: :json_not_found

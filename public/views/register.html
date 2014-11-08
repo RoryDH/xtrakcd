@@ -1,0 +1,57 @@
+<div ng-controller="RegisterCtrl" class="modal register-modal" tabindex="-1" role="dialog">
+  {{closeRegister = $hide}}
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" ng-click="$hide()">&times;</button>
+        <h4 class="modal-title">Register</h4>
+      </div>
+      <div class="modal-body">
+        <div class="text-center" ng-if="registering">
+          <loader></loader>
+          <small class="center-block text-info">Creating account...</small>
+        </div>
+        <div class="alert alert-danger alert-sm" ng-show="registerServer">
+          <ul class="list-unstyled">
+            <li ng-repeat="(field, errs) in registerServer.saveErrors">
+              <strong>{{field | cap}}</strong>
+              <ul>
+                <li ng-repeat="e in errs" ng-bind="e"></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <form name="registerForm" novalidate ng-submit="create()">
+          <fieldset ng-disabled="registering">
+            <div class="form-group" ng-class="{ 'has-error' : registerForm.name.$invalid && !registerForm.name.$pristine }">
+              <label>Name</label>
+              <input type="text" name="name" class="form-control" ng-model="newU.name" ng-maxlength="300" required placeholder="Cueball">
+              <p ng-show="!newU.name && registerForm.name.$dirty" class="help-block">Name must be present.</p>
+              <p ng-show="registerForm.name.$error.maxlength" class="help-block">Name is too long.</p>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error' : registerForm.email.$invalid && !registerForm.email.$pristine }">
+              <label>Email</label>
+              <input type="email" name="email" class="form-control" ng-model="newU.email" required ng-maxlength=200 placeholder="person@example.com">
+              <p ng-show="registerForm.email.$invalid && registerForm.email.$dirty" class="help-block">Enter a valid email.</p>
+              <p ng-show="registerForm.email.$error.maxlength" class="help-block">Email is too long.</p>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error' : registerForm.password.$invalid && !registerForm.password.$pristine }">
+              <label>Password</label>
+              <input type="password" name="password" class="form-control" ng-model="newU.password"
+                required ng-minlength="6" ng-maxlength="200" placeholder="**********">
+              <p ng-show="registerForm.password.$dirty && !newU.password.length"
+                class="help-block">
+                Password must be at least 6 characters.
+              </p>
+              <p ng-show="registerForm.password.$error.maxlength" class="help-block">Password is too long.</p>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block text-center"
+              value="Create your account!" ng-disabled="registerForm.$invalid">
+              Submit
+            </button>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
