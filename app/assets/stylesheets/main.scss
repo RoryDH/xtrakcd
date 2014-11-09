@@ -35,11 +35,10 @@ input[type=search] {
   width: 100%;
   z-index: 300;
   background-color: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid #e6e6e6;
   .xtra-header {
     padding-top: 7px;
     padding-bottom: 3px;
-    border: solid #e6e6e6;
-    border-width: 0 0px 1px 0px;
   }
 }
 

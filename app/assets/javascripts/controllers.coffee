@@ -70,10 +70,7 @@ xtrakcd.controller("ListCtrl", [
         $scope.comics.$promise.then -> $scope.listLoading = false
 
     if $routeParams.q
-      $scope.comicListFilter['search'] =
-        value: $routeParams.q
-        name: "Search: #{$routeParams.q}"
-        serverAttrs: {q: $routeParams.q}
+      $scope.navFilter.query = $routeParams.q
 
     $scope.comicModalByIndex = (i) ->
       $scope.openComicModal $scope.comics[i]
@@ -104,9 +101,12 @@ xtrakcd.controller("ListFilterController", [
         {text: "descending", click: "comicListFilter.sort.serverAttrs.order_dir = 'desc'"}
         {text: "ascending", click: "comicListFilter.sort.serverAttrs.order_dir = 'asc'"}
       ]
-    
-    if $scope.comicListFilter.search
-      $scope.navFilter.query = $scope.comicListFilter.search.serverAttrs.q
+
+    if $scope.navFilter.query
+      $scope.comicListFilter['search'] =
+      value: $scope.navFilter.query
+      name: "Containing: #{$scope.navFilter.query}"
+      serverAttrs: {q: $scope.navFilter.query}
     else
       $scope.comicListFilter['sort'] = premadePredicates.sort
 
