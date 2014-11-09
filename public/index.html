@@ -41,12 +41,10 @@
             </div>
           </div>
         </form>
-        <span ng-if="u">
+        <span ng-if="u.email">
           <i class="fa fa-clock-o" bs-tooltip title="Schedules"></i>
           <i class="fa fa-cog" bs-tooltip title="Options"></i>
-          <span bs-dropdown data-placement="bottom-right" data-template="user_dropdown.html">
-            <i class="fa fa-user" bs-tooltip title="Me"></i>
-          </span>
+          <i class="fa fa-user" title="Me" bs-dropdown data-placement="bottom-right" data-template="user_dropdown.html"></i>
           <script type="text/ng-template" id="user_dropdown.html">
             <ul class="dropdown-menu">
               <li class="dropdown-header" ng-bind="u.name"></li>
@@ -55,7 +53,7 @@
             </ul>
           </script>
         </span>
-        <div class="btn-group btn-group-sm account-btns" ng-if="!u">
+        <div class="btn-group btn-group-sm account-btns" ng-if="u && !u.email">
           <button type="button" class="btn btn-default"
             bs-popover data-template="login.html" placement="bottom">Login</button>
           <button type="button" class="btn btn-default register-nav" ng-click="registerModal()" bs-tooltip title="Register to keep track of read comics and customise the site.">
@@ -167,16 +165,16 @@
           <loader></loader>
           <small class="center-block text-info">Loading...</small>
         </div>
-        <div class="alert alert-danger alert-sm" ng-show="loginServer">
+        <div class="alert alert-danger alert-sm" ng-show="loginServer.length">
           <span ng-repeat="e in loginServer">{{e}}{{$last ? '.' : ', '}}</span>
         </div>
         <form name="loginForm" novalidate ng-submit="login()" ng-hide="loggingIn">
           <fieldset ng-disabled="loggingIn">
-            <div class="form-group" ng-class="{ 'has-error' : loginForm.email.$invalid && !loginForm.email.$pristine }">
+            <div class="form-group" ng-class="{ 'has-error' : loginForm.email.$invalid && loginForm.email.$dirty }">
               <input type="email" name="email" class="form-control input-sm" ng-model="lUser.email" required placeholder="person@example.com">
               <p ng-show="loginForm.email.$invalid && loginForm.email.$dirty" class="help-block">Enter a valid email.</p>
             </div>
-            <div class="form-group" ng-class="{ 'has-error' : loginForm.password.$invalid && !loginForm.password.$pristine }">
+            <div class="form-group" ng-class="{ 'has-error' : loginForm.password.$invalid && loginForm.password.$dirty }">
               <input type="password" name="password" class="form-control input-sm" ng-model="lUser.password" required placeholder="**********">
               <p ng-show="loginForm.password.$dirty && !lUser.password"
                 class="help-block">

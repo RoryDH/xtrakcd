@@ -14,15 +14,9 @@ input[type=search] {
   padding: 5px;
 }
 
-// .modal-instant-fade {
-//   opacity: 1;
-//   &.modal-backdrop {
-
-//   }
-// }
-
 .modal-backdrop {
-  background: rgba(0,0,0,.5);
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
 }
 
 .xtra-center-column {

@@ -9,16 +9,14 @@ xtrakcd.controller("MainCtrl", [
   ($scope, $http, $location, $modal, Resp) ->
     $scope.u = null
     $scope.setUser = (u) ->
-      $scope.u = u
+      $scope.u = u || {}
 
-    $http.get('/api/me')
-    .success (u) ->
-      $scope.setUser u if u.name
+    $http.get('/api/me').success (u) ->
+      $scope.setUser u.me
 
     $scope.logout = ->
-      $http.post('/api/u/out', null)
-      .success (data) ->
-        $scope.setUser null if data.authStatus is 'out'
+      $http.delete('/api/out').success (data) ->
+        $scope.setUser()
 
     $scope.currentC = null
     cModal = $modal(
