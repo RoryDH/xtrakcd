@@ -44,10 +44,10 @@ xtrakcd.controller("MainCtrl", [
         scope: $scope
       )
 
+    $scope.navFilter = {}
     $scope.gotoSearch = (query) ->
       $scope.currentC = null
       $location.path('/').search('q', query)
-
 ])
 
 xtrakcd.controller("ListCtrl", [
@@ -55,9 +55,85 @@ xtrakcd.controller("ListCtrl", [
   '$routeParams'
   'Comic'
   ($scope, $routeParams, Comic) ->
-    $scope.comics = Comic.list({q: $routeParams.q})
+    $scope.comicListFilter = {}
+    $scope.comics = []
+
+    predicateTypes = ['sort', 'search', 'after', 'before']
+    $scope.loadComicList = ->
+      $scope.listLoading = true
+      $scope.$apply ->
+        queryObject = {}
+        predicateTypes.forEach (attr) ->
+          return unless $scope.comicListFilter[attr]
+          angular.extend(queryObject, $scope.comicListFilter[attr].serverAttrs || {})
+        $scope.comics = Comic.list(queryObject)
+        $scope.comics.$promise.then -> $scope.listLoading = false
+
+    if $routeParams.q
+      $scope.comicListFilter['search'] =
+        value: $routeParams.q
+        name: "Search: #{$routeParams.q}"
+        serverAttrs: {q: $routeParams.q}
+
     $scope.comicModalByIndex = (i) ->
       $scope.openComicModal $scope.comics[i]
+])
+
+xtrakcd.controller("ListFilterController", [
+  '$scope'
+  'debounce'
+  ($scope, debounce) ->
+    # Example predicate
+    # $scope.comicListFilter['greeting'] =
+    #   serverAttrs: {greeting_type: 'hello'} value to send to server
+    #   name: 'hello' UI name
+    #   dropdown: {<angular.strap dropdown object>}
+    #   iconName: 'fa-my-icon'
+
+    premadePredicates =
+      sort:
+        serverAttrs: { order_dir: 'desc', order_by: 'number' }
+        name: 'number descending'
+        iconName: 'fa-sort'
+
+    $scope.predicateDropdowns =
+      sort: [
+        {text: "number", click: "comicListFilter.sort.serverAttrs.order_by = 'number'"}
+        {text: "title", click: "comicListFilter.sort.serverAttrs.order_by = 'title'"}
+        {divider: true}
+        {text: "descending", click: "comicListFilter.sort.serverAttrs.order_dir = 'desc'"}
+        {text: "ascending", click: "comicListFilter.sort.serverAttrs.order_dir = 'asc'"}
+      ]
+    
+    if $scope.comicListFilter.search
+      $scope.navFilter.query = $scope.comicListFilter.search.serverAttrs.q
+    else
+      $scope.comicListFilter['sort'] = premadePredicates.sort
+
+    $scope.availablePredicates = [
+      {
+        "text": "Sort",
+        "click": "addPredicate('sort')"
+      },
+      {
+        "divider": true
+      },
+      {
+        "text": "Clear filter",
+        "click": "comicListFilter = {}"
+      }
+    ]
+    $scope.addPredicate = (type) ->
+      predicate = premadePredicates[type]
+      $scope.comicListFilter[type] = predicate if predicate
+    $scope.removePredicate = (type) -> delete $scope.comicListFilter[type]
+
+    # $scope.loadComicList()
+
+    loadComicListDebounced = debounce($scope.loadComicList, 1200, false)
+    $scope.$watch('comicListFilter', ( ->
+      loadComicListDebounced()
+    ), true)
 ])
 
 xtrakcd.controller("ComicModalCtrl", [
@@ -95,7 +171,7 @@ xtrakcd.controller("LoginCtrl", [
     $scope.login = ->
       $scope.loggingIn = true
       $scope.loginServer = []
-      $http.post('/api/u/in', $scope.lUser)
+      $http.post('/api/in', $scope.lUser)
       .success (u) ->
         $scope.closeLogin()
         $scope.loggingIn = false
@@ -107,5 +183,4 @@ xtrakcd.controller("LoginCtrl", [
         else
           $scope.loginServer = ["Login Error"]
 ])
-
 

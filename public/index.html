@@ -29,7 +29,7 @@
     <div class="xtra-header xtra-center-column col col-sm-10">
       <a ng-href="/#/"><div class="pull-left" id="main-logo"></div></a>
       <div class="pull-right nav-buttons">
-        <form class="xtra-search pull-left" ng-submit="gotoSearch(navSearchQuery)">
+        <form class="xtra-search pull-left" ng-submit="gotoSearch(navFilter.query)">
           <div class="form-group">
             <div class="input-group search-box-wrap">
               <span class="input-group-btn">
@@ -37,12 +37,11 @@
                   <i class="fa fa-search"></i>
                 </button>
               </span>
-              <input ng-model="navSearchQuery" type="search" class="form-control input-sm" placeholder="Search..."/>
+              <input ng-model="navFilter.query" type="search" class="form-control input-sm" placeholder="Search..."/>
             </div>
           </div>
         </form>
         <span ng-if="u">
-
           <i class="fa fa-clock-o" bs-tooltip title="Schedules"></i>
           <i class="fa fa-cog" bs-tooltip title="Options"></i>
           <span bs-dropdown data-placement="bottom-right" data-template="user_dropdown.html">
@@ -78,6 +77,34 @@
   <script type="text/ng-template" id="list.html">
     <div class="col comic-list-spacer col-sm-2" ng-class="{'no-width': currentC}"></div>
     <div class="col comic-list" ng-class="{'col-sm-8': !currentC, 'col-sm-3': currentC}">
+      <div class="comic-list-filter" ng-controller="ListFilterController">
+        <i class="fa fa-filter"></i>
+        <div class="btn-group" ng-repeat="(pType, predicate) in comicListFilter">
+          <button type="button" class="btn btn-default btn-xs" disabled="disabled">
+            <i class="fa {{predicate.iconName}}"></i> <span ng-bind="predicate.name"></span>
+          </button>
+          <button type="button" class="btn btn-default btn-xs" ng-click="removePredicate(pType)">
+            <i class="fa fa-times"></i>
+          </button>
+          <button ng-if="predicateDropdowns[pType]" type="button" class="btn btn-default btn-xs dropdown-toggle" bs-dropdown="predicateDropdowns[pType]">
+            <span class="caret"></span>
+          </button>
+        </div>
+
+        <button type="button" class="btn btn-default btn-xs dropdown-toggle" bs-dropdown="availablePredicates" container='self'>
+          <i class="fa fa-plus"></i>
+          Filter
+        </button>
+      </div>
+
+      <a href="#" ng-click="showFilterJSON = !showFilterJSON"></a>
+      <pre ng-if="showFilterJSON" ng-bind="comicListFilter | json "></pre>
+      
+      <div class="text-center" ng-show="listLoading">
+        <loader></loader>
+        <small class="center-block text-info">Loading...</small>
+      </div>
+
       <div class="comic-in-list" ng-repeat="c in comics" ng-class="{'first-comic': $first}" ng-click="comicModalByIndex($index)">
         <span class="comic-number" ng-bind="'#' + c.number"></span>
         <span class="comic-title" ng-bind-html="c.title | unsafe"></span>
@@ -95,6 +122,7 @@
           <div class="row">
             <div class="col-sm-10">
               <button type="button" class="close" ng-click="closeCurrent()">&times;</button>
+              <span class="comic-number" ng-bind="'#' + currentC.number"></span>
               <span ng-bind-html="currentC.title | unsafe" class="comic-title"></span>
             </div>
             <div class="col-sm-2"></div>
@@ -117,13 +145,13 @@
             <h4 class="modal-title" ng-bind="currentC.title">Pull-up bar</h4>
           </div>
           <div class="modal-body">
-            <comic-image img-url="currentC.img_url"></comic-image>
+            <comic-image comic="currentC"></comic-image>
           </div>
           <div class="modal-footer">
             <button class="btn btn-sm btn-default" ng-click="showAltText = true" ng-hide="showAltText">
               Alt
             </button>
-            <span ng-bind="currentC.altText" ng-show="showAltText"></span>
+            <span ng-bind="currentC.alt_text" ng-show="showAltText"></span>
           </div>
         </div>
       </div>

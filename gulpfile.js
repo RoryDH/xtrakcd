@@ -9,12 +9,11 @@ var coffeelint = require('gulp-coffeelint');
 var gutil = require('gulp-util');
 
 var fileLocations = {
-  front: [
-  //   "./assets/ng/main.coffee",
-  //   "./assets/ng/services.coffee",
-  //   "./assets/ng/controllers.coffee",
-  //   "./assets/ng/directives.coffee"
+  coffee: [
     "./app/assets/javascripts/*.coffee"
+  ],
+  js: [
+    "./app/assets/javascripts/*.js"
   ],
   scss: ["./app/assets/stylesheets/*.scss"]
   // cssLibs: ["./assets/csslib/*.css"]
@@ -33,7 +32,7 @@ gulp.task('css', function () {
 // Lint JS
 // Frontend
 gulp.task('front-lint', function() {
-  gulp.src(fileLocations.front)
+  gulp.src(fileLocations.coffee)
     .pipe(coffeelint({
       max_line_length: {
         value: 138
@@ -44,9 +43,12 @@ gulp.task('front-lint', function() {
 
 //Concat & Minify JS
 gulp.task('ng-concat', function() {
-  gulp.src(fileLocations.front)
-    .pipe(coffee({bare: true}).on('error', gutil.log))
-    .pipe(concat('comp.js'))
+  var coffeeStream = gulp.src(fileLocations.coffee).pipe(coffee({bare: true}).on('error', gutil.log));
+  var jsStream = gulp.src(fileLocations.js);
+  new StreamQueue({objectMode: true},
+    coffeeStream,
+    jsStream
+  ).pipe(concat('comp.js'))
     // .pipe(gulp.dest('./dist'))
     // .pipe(rename('all.min.js'))
     // .pipe(uglify())
@@ -56,6 +58,7 @@ gulp.task('ng-concat', function() {
 // Default
 gulp.task('default', ['front-lint', 'ng-concat', 'css'], function() {
   // Watch JS Files
-  gulp.watch(fileLocations.front, ['front-lint', 'ng-concat']);
+  gulp.watch(fileLocations.coffee, ['front-lint', 'ng-concat']);
+  gulp.watch(fileLocations.js, ['ng-concat']);
   gulp.watch(fileLocations.scss, ['css']);
 });

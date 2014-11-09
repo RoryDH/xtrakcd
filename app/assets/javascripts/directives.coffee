@@ -14,7 +14,7 @@ xtrakcd.directive("comicImage", [->
       <div class=\"text-danger image-message\" ng-show=\"imageStatus === 2\">
         <i class=\"fa fa-times\"></i> Error getting comic image...
       </div>
-      <img ng-src="{{comic.img_url}}" title="{{comic.alt_text}}" ng-show="imageStatus"/>
+      <img ng-src="{{comic.img_url}}" title="{{comic.alt_text}}" ng-show="imageStatus">
     </div>
   """
 
@@ -28,7 +28,7 @@ xtrakcd.directive("comicImage", [->
       scope.imageStatus = 1
       scope.$apply()
 
-    scope.$watch "imgUrl", ->
+    scope.$watch "comic", ->
       scope.imageStatus = 0
 ])
 

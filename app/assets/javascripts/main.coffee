@@ -31,7 +31,13 @@ xtrakcd.config([
 
     angular.extend $dropdownProvider.defaults,
       animation: null
+])
 
+xtrakcd.run([
+  '$rootScope'
+  '$location'
+  ($rootScope, $location) ->
+    $rootScope.location = $location
 ])
 
 xtrakcd.filter('cap', ->

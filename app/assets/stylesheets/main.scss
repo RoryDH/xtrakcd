@@ -110,6 +110,10 @@ input[type=search] {
   }
 }
 
+.comic-number {
+  font-style: italic;
+  color: #8f8f8f;
+}
 // COMIC LIST
 .comic-in-list {
   background-color: #ffffff;
@@ -122,11 +126,10 @@ input[type=search] {
     font-size: 16px;
   }
   .comic-number {
-    font-style: italic;
     font-size: 11px;
-    color: #8f8f8f;
     float: left;
     line-height: 19px;
+    min-width: 32px;
   }
 
   &:last-child {
@@ -216,6 +219,16 @@ input[type=search] {
 }
 .modal-image-wrap {
   overflow-x: scroll;
+}
+
+.comic-list-filter {
+  margin-bottom: 10px;
+  .btn {
+    margin-bottom: 5px;
+  }
+  .btn-group {
+    margin-left: 3px;
+  }
 }
 
 .comic-modal {

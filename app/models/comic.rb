@@ -1,9 +1,15 @@
 class Comic < ActiveRecord::Base
   include PgSearch
-  pg_search_scope :search, :against => [:title, :alt_text, :transcript]
+  pg_search_scope :search, against: {
+    title: 'A',
+    alt_text: 'B',
+    transcript: 'C'
+  }, using: { tsearch: { dictionary: "english" } }
 
   has_many :favourites, as: :favable, dependent: :destroy
   has_many :favourited_by, through: :favourites, source: :user
+
+  max_paginates_per 50
 
   def to_param
     number.to_i
@@ -29,5 +35,11 @@ class Comic < ActiveRecord::Base
     else
       create(comic_hash)
     end
+  end
+
+  def self.order_with_defaults(attribute, direction)
+    attribute = 'number' unless column_names.include?(attribute)
+    direction = 'asc' unless %w(asc desc).include?(direction)
+    order(attribute.to_sym => direction.to_sym)
   end
 end
